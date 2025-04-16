@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "ogp-playground",
   "type": "module",
   "scripts": {
     "dev": "vite",
