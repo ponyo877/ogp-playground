@@ -2,10 +2,10 @@
   "name": "ogp-playground",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && vite build --ssr",
-    "preview": "$npm_execpath run build && wrangler dev dist-server/index.js",
-    "deploy": "$npm_execpath run build && wrangler deploy dist-server/index.js"
+    "dev": "wrangler dev src/index.tsx",
+    "build": "echo 'Build step removed, wrangler handles build.'",
+    "preview": "wrangler dev src/index.tsx --local",
+    "deploy": "wrangler deploy src/index.tsx"
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.6.2",
