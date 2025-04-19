@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { renderer } from './renderer'
-import { v4 as uuidv4 } from 'uuid';
+import { ulid } from 'ulid';
 import { generateImage, Display } from './lib/img'
 // moment-timezone をインポート
 import moment from 'moment-timezone';
@@ -20,7 +20,7 @@ app.get('/', (c) => {
 /*
 // - 現在日付・時刻がOGP画像として出る
 // - 運勢(大吉~凶)がOGP画像として出る
-// - UUIDがOGP画像として出る
+// - ULIDがOGP画像として出る
 // - 今日の「謎の四字熟語」
 // - 最新のWikipediaランダム記事のタイトル
 // - 1秒ごとに増える「このリンクが作られてから経過した秒数」
@@ -67,8 +67,8 @@ app.get('/img/:mode', async (c) => {
         'Content-Type': 'image/png',
       })
     }
-    case 'uuid': {
-      const msg = uuidv4();
+    case 'ulid': {
+      const msg = ulid();
       const img = await generateImage(<Display msg={msg} />);
       return c.body(img, 200, {
         'Content-Type': 'image/png',
