@@ -8,9 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@resvg/resvg-wasm':
+        specifier: ^2.6.2
+        version: 2.6.2
       hono:
         specifier: ^4.7.7
         version: 4.7.7
+      react:
+        specifier: ^19.1.0
+        version: 19.1.0
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
+      yoga-wasm-web:
+        specifier: ^0.3.3
+        version: 0.3.3
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: ^0.1.15
@@ -21,6 +33,9 @@ importers:
       '@hono/vite-build':
         specifier: ^1.5.0
         version: 1.6.0(hono@4.7.7)
+      '@types/react':
+        specifier: ^19.1.2
+        version: 19.1.2
       vite:
         specifier: ^6.1.1
         version: 6.3.0
@@ -416,6 +431,10 @@ packages:
   '@kamilkisiela/fast-url-parser@1.1.4':
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
 
+  '@resvg/resvg-wasm@2.6.2':
+    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
+    engines: {node: '>= 10'}
+
   '@rollup/rollup-android-arm-eabi@4.40.0':
     resolution: {integrity: sha512-+Fbls/diZ0RDerhE8kyC6hjADCXA1K4yVNlH0EYfd2XjyH0UGgzaQ8MlT0pCXAThfxv3QUAczHaL+qSv1E4/Cg==}
     cpu: [arm]
@@ -519,6 +538,9 @@ packages:
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
+  '@types/react@19.1.2':
+    resolution: {integrity: sha512-oxLPMytKchWGbnQM9O7D67uPa9paTNxO7jVoNMXgkkErULBPhPARCfkKL9ytcIJJRGjbsVwW4ugJzyFFvm/Tiw==}
+
   '@whatwg-node/fetch@0.9.23':
     resolution: {integrity: sha512-7xlqWel9JsmxahJnYVUj/LLxWcnA93DR4c9xlw3U814jWTiYalryiH1qToik1hOxweKKRLi4haXHM5ycRksPBA==}
     engines: {node: '>=18.0.0'}
@@ -567,6 +589,9 @@ packages:
   cookie@0.7.2:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
+
+  csstype@3.1.3:
+    resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
   data-uri-to-buffer@2.0.2:
     resolution: {integrity: sha512-ND9qDTLc6diwj+Xe5cdAgVTbLVdXbtxTJRXRhli8Mowuaan+0EJOtdqJ0QCHNSSPyoXGx9HX2/VMnKeC34AChA==}
@@ -684,6 +709,10 @@ packages:
   printable-characters@1.0.42:
     resolution: {integrity: sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==}
 
+  react@19.1.0:
+    resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
+    engines: {node: '>=0.10.0'}
+
   rollup@4.40.0:
     resolution: {integrity: sha512-Noe455xmA96nnqH5piFtLobsGbCij7Tu+tb3c1vYjNbTkfzGqXqQXG3wJaYXkRZuQ0vEYN4bhwg7QnIrqB5B+w==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -739,6 +768,10 @@ packages:
 
   urlpattern-polyfill@10.0.0:
     resolution: {integrity: sha512-H/A06tKD7sS1O1X2SshBVeA5FLycRpjqiBeqGKmBwBDBy28EnRjORxTNe269KSSr5un5qyWi1iL61wLxpd+ZOg==}
+
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
 
   vite-plugin-ssr-hot-reload@0.4.2:
     resolution: {integrity: sha512-KhuXZxYXSlzEo6S3leOj806RI6XGdspDYPwqUYFGJajlsB4MffQ5My6rW+YO9uYkc2eM2Q+7OcCUnPrHaa3Upw==}
@@ -815,6 +848,9 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+
+  yoga-wasm-web@0.3.3:
+    resolution: {integrity: sha512-N+d4UJSJbt/R3wqY7Coqs5pcV0aUj2j9IaQ3rNj9bVCLld8tTGKRa2USARjnvZJWVx1NDmQev8EknoczaOQDOA==}
 
   youch@3.3.4:
     resolution: {integrity: sha512-UeVBXie8cA35DS6+nBkls68xaBBXCye0CNznrhszZjTbRVnJKQuNsyLKBTTL4ln1o1rh2PKtv35twV7irj5SEg==}
@@ -1083,6 +1119,8 @@ snapshots:
 
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
+  '@resvg/resvg-wasm@2.6.2': {}
+
   '@rollup/rollup-android-arm-eabi@4.40.0':
     optional: true
 
@@ -1145,6 +1183,10 @@ snapshots:
 
   '@types/estree@1.0.7': {}
 
+  '@types/react@19.1.2':
+    dependencies:
+      csstype: 3.1.3
+
   '@whatwg-node/fetch@0.9.23':
     dependencies:
       '@whatwg-node/node-fetch': 0.6.0
@@ -1194,6 +1236,8 @@ snapshots:
     optional: true
 
   cookie@0.7.2: {}
+
+  csstype@3.1.3: {}
 
   data-uri-to-buffer@2.0.2: {}
 
@@ -1327,6 +1371,8 @@ snapshots:
 
   printable-characters@1.0.42: {}
 
+  react@19.1.0: {}
+
   rollup@4.40.0:
     dependencies:
       '@types/estree': 1.0.7
@@ -1424,6 +1470,8 @@ snapshots:
 
   urlpattern-polyfill@10.0.0: {}
 
+  uuid@11.1.0: {}
+
   vite-plugin-ssr-hot-reload@0.4.2:
     dependencies:
       picomatch: 4.0.2
@@ -1474,6 +1522,8 @@ snapshots:
       - utf-8-validate
 
   ws@8.18.0: {}
+
+  yoga-wasm-web@0.3.3: {}
 
   youch@3.3.4:
     dependencies:
