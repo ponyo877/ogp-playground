@@ -1,7 +1,7 @@
 const endpoint = 'https://ogp-playground.ponyo877.workers.dev'
 
 
-const renderHtml = (mode: string, redirectURL: string) => {
+export const renderHtml = (mode: string, redirectURL: string) => {
     let body = '<body><h1>Created by <a href="https://x.com/ponyo877">ponyo877</a></h1></body>'
     let redirectElem = ''
     if (redirectURL) {

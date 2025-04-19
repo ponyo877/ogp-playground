@@ -2,7 +2,9 @@ import { Hono } from 'hono'
 import { renderer } from './renderer'
 import { v4 as uuidv4 } from 'uuid';
 import { generateImage, Display } from './lib/img'
-import moment from 'moment';
+// moment-timezone をインポート
+import moment from 'moment-timezone';
+import { renderHtml } from './metadata'
 
 
 const app = new Hono()
@@ -23,35 +25,34 @@ app.get('/', (c) => {
 // - 最新のWikipediaランダム記事のタイトル
 // - 1秒ごとに増える「このリンクが作られてから経過した秒数」
 // - 最新のGitHubトレンド1位のリポジトリ名
-
+*/
 app.get('/:mode', (c) => {
   const key = c.req.param('mode')
   switch (key) {
     case 'wiki':
-      // This would cause an error as renderHtml is not defined
       // return c.text(renderHtml(key, 'https://ja.wikipedia.org/wiki/Special:Random'), 200, {
       //   'Content-Type': 'text/html; charset=utf-8',
       // })
-      return c.text('Wiki mode HTML rendering is currently disabled.', 501)
-  //   case 'github':
-  //     // return c.text(renderHtml(key, ''), 200, {
-  //     //   'Content-Type': 'text/html; charset=utf-8',
-  //     // })
-      return c.text('GitHub mode HTML rendering is currently disabled.', 501)
-    default:
+      return c.text('Wiki mode is currently disabled.', 501)
+    case 'github':
       // return c.text(renderHtml(key, ''), 200, {
       //   'Content-Type': 'text/html; charset=utf-8',
       // })
-      return c.text('Default mode HTML rendering is currently disabled.', 501)
+      return c.text('GitHub mode is currently disabled.', 501)
+    default:
+      return c.text(renderHtml(key, ''), 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+      })
     }
 })
-*/
+
 
 app.get('/img/:mode', async (c) => {
   const key = c.req.param('mode')
   switch (key) {
     case 'timestamp': {
-      const msg = moment().format();
+      // moment-timezone を使用して JST でフォーマット
+      const msg = moment().tz('Asia/Tokyo').format();
       const img = await generateImage(<Display msg={msg} />);
       return c.body(img, 200, {
         'Content-Type': 'image/png',
