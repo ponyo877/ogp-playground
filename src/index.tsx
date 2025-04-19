@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { renderer } from './renderer'
 import { v4 as uuidv4 } from 'uuid';
 import { generateImage, Display } from './lib/img'
+import moment from 'moment';
 
 
 const app = new Hono()
@@ -50,7 +51,7 @@ app.get('/img/:mode', async (c) => {
   const key = c.req.param('mode')
   switch (key) {
     case 'timestamp': {
-      const msg = new Date().toISOString();
+      const msg = moment().format();
       const img = await generateImage(<Display msg={msg} />);
       return c.body(img, 200, {
         'Content-Type': 'image/png',
