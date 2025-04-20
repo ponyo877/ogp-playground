@@ -1,12 +1,15 @@
+// フォントオプションの型を定義してエクスポート
+export interface FontOptions {
+  family: string;
+  weight?: number;
+  text?: string;
+}
+
 export async function loadGoogleFont({
     family,
     weight,
     text,
-  }: {
-    family: string;
-    weight?: number;
-    text?: string;
-  }) {
+  }: FontOptions) { // 型エイリアスを使用
     const params: Record<string, string> = {
       family: `${encodeURIComponent(family)}${weight ? `:wght@${weight}` : ''}`,
     };

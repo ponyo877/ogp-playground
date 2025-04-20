@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 import { renderer } from './renderer'
+import {v4 as uuidv4} from 'uuid';
 import { ulid } from 'ulid';
-import { generateImage, Display } from './lib/img'
+import { generateImage } from './lib/img' // Display を削除
 // moment-timezone をインポート
 import moment from 'moment-timezone';
 import { renderHtml } from './metadata'
@@ -53,23 +54,26 @@ app.get('/img/:mode', async (c) => {
     case 'timestamp': {
       // moment-timezone を使用して JST でフォーマット
       const msg = moment().tz('Asia/Tokyo').format();
-      const img = await generateImage(<Display msg={msg} />);
+      const img = await generateImage(msg); // 文字列を直接渡す
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
     }
     case 'fortune': {
-      // TODO: Implement actual fortune logic
-      const fortunes = ['大吉', '中吉', '小吉', '吉', '末吉', '凶', '大凶'];
+      const fortunes = ['daikichi', 'kichi', 'shoukichi', 'suekichi', 'kyou', 'daikyou'];
       const msg = fortunes[Math.floor(Math.random() * fortunes.length)];
-      const img = await generateImage(<Display msg={msg} />);
+      return c.redirect(`https://ogp-playground.folks-chat.com/fortune/${msg}.png`)
+    }
+    case 'uuid': {
+      const msg = uuidv4();
+      const img = await generateImage(msg); // 文字列を直接渡す
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
-    }
+    } 
     case 'ulid': {
       const msg = ulid();
-      const img = await generateImage(<Display msg={msg} />);
+      const img = await generateImage(msg); // 文字列を直接渡す
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
@@ -77,7 +81,7 @@ app.get('/img/:mode', async (c) => {
     case 'yojijukugo': {
       // TODO: Implement actual Yojijukugo logic
       const msg = '四字熟語'; // Placeholder
-      const img = await generateImage(<Display msg={msg} />);
+      const img = await generateImage(msg); // 文字列を直接渡す
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
@@ -85,7 +89,7 @@ app.get('/img/:mode', async (c) => {
     case 'wiki': {
       // TODO: Implement actual Wikipedia fetching logic
       const msg = 'Wikipedia記事'; // Placeholder
-      const img = await generateImage(<Display msg={msg} />);
+      const img = await generateImage(msg); // 文字列を直接渡す
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
