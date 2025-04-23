@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { renderer } from './renderer'
 import {v4 as uuidv4} from 'uuid';
 import { ulid } from 'ulid';
-import { generateImage } from './lib/img' // Display を削除
+import { generateImage, generateWrappingImage } from './lib/img' // Display を削除
 // moment-timezone をインポート
 import moment from 'moment-timezone';
 import { renderHtml } from './metadata'
@@ -52,7 +52,6 @@ app.get('/img/:mode', async (c) => {
   const key = c.req.param('mode')
   switch (key) {
     case 'timestamp': {
-      // moment-timezone を使用して JST でフォーマット
       const msg = moment().tz('Asia/Tokyo').format();
       const img = await generateImage(msg); // 文字列を直接渡す
       return c.body(img, 200, {
@@ -61,8 +60,8 @@ app.get('/img/:mode', async (c) => {
     }
     case 'fortune': {
       const fortunes = ['daikichi', 'kichi', 'shoukichi', 'suekichi', 'kyou', 'daikyou'];
-      const msg = fortunes[Math.floor(Math.random() * fortunes.length)];
-      return c.redirect(`https://ogp-playground.folks-chat.com/fortune/${msg}.png`)
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      return c.redirect(`https://ogp-playground.folks-chat.com/fortune/${fortune}.png`)
     }
     case 'uuid': {
       const msg = uuidv4();
@@ -90,6 +89,13 @@ app.get('/img/:mode', async (c) => {
       // TODO: Implement actual Wikipedia fetching logic
       const msg = 'Wikipedia記事'; // Placeholder
       const img = await generateImage(msg); // 文字列を直接渡す
+      return c.body(img, 200, {
+        'Content-Type': 'image/png',
+      })
+    }
+    case 'free': {
+      const msg = c.req.query('m') || '<BLANK>';
+      const img = await generateWrappingImage(msg);
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
