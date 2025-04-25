@@ -5,7 +5,7 @@ interface Yojijukugo {
     meaning: string;
 }
 
-const yojijukugoList: Yojijukugo[] = [
+const yojijukugos: Yojijukugo[] = [
     { yojijukugo: "哀哀父母", yomi: "あいあいふぼ", origin: "https://www.kanjipedia.jp/kotoba/0000015300", meaning: "苦労を重ねた父母の死をかなしみ、その恩に報いることができなかったことをなげく語。親孝行な子が親を思慕する真情を表したもの。「哀哀」は深くかなしむさま。", },
     { yojijukugo: "合縁奇縁", yomi: "あいえんきえん", origin: "https://www.kanjipedia.jp/kotoba/0002341500", meaning: "不思議な巡り合わせの縁。人と人との結びつきで、気心が合う合わないは因縁という不思議な力によるものだということ。縁は異なもの味なもの", },
     { yojijukugo: "哀毀骨立", yomi: "あいきこつりつ", origin: "https://www.kanjipedia.jp/kotoba/0000016000", meaning: "あまりのかなしさに、身がやせ細り、骨ばかりになること。父母との死別などで非常にかなしむことのたとえ。「哀毀」はかなしみのためにやせ細る意。「骨立」は肉が落ちて骨と皮ばかりになる意。", },
@@ -2199,5 +2199,4 @@ const yojijukugoList: Yojijukugo[] = [
     { yojijukugo: "和衷協同", yomi: "わちゅうきょうどう", origin: "https://www.kanjipedia.jp/kotoba/0007404800", meaning: "心を同じくして、ともに力を合わせること。「和衷」は、心の底からやわらぎ合うこと。", },
     { yojijukugo: "和風慶雲", yomi: "わふうけいうん", origin: "https://www.kanjipedia.jp/kotoba/0007405200", meaning: "おだやかに吹くやわらいだ風と、慶事の前兆の雲。おだやかで徳の備わった人物の形容。孔子の高弟の顔回を評した語。", },
     { yojijukugo: "和洋折衷", yomi: "わようせっちゅう", origin: "https://www.kanjipedia.jp/kotoba/0007405800", meaning: "日本と西洋の様式をほどよく取り合わせること。表記「折衷」は「折中」とも書く。", },
-
 ];
