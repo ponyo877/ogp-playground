@@ -334,15 +334,15 @@ export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) =>
         {/* 読み */}
         <div
           style={{
-            width: '100%',
-            textAlign: 'center',
+            height: '60px',
+            display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             fontSize: `${yomiFontSize}px`,
             color: '#333',
-            letterSpacing: '1.0em', // 文字間隔を調整 (1.2emから少し戻す)
-            marginBottom: '20px', // 下マージン
-            fontWeight: 400, // Regular
+            letterSpacing: '1.0em',
+            marginBottom: '10px',
+            fontWeight: 400,
           }}
         >
           {yomi}
@@ -351,15 +351,16 @@ export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) =>
         {/* 四字熟語 */}
         <div
           style={{
-            flexGrow: 1, // 残りのスペースを埋める
+            flex: 1,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             fontSize: `${yojijukugoFontSize}px`,
-            fontWeight: 700, // Bold
+            fontWeight: 700,
             color: '#111',
             lineHeight: 1.1,
             textAlign: 'center',
+            margin: '20px 0',
           }}
         >
           {yojijukugo}
@@ -368,37 +369,20 @@ export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) =>
         {/* 意味 */}
         <div
           style={{
-            width: '100%',
+            height: '180px',
             fontSize: `${meaningFontSize}px`,
             color: '#444',
             lineHeight: 1.6,
-            textAlign: 'left', // 左揃え
-            maxHeight: '200px', // 高さに制限を設ける (調整)
-            overflow: 'hidden', // はみ出した部分は隠す (必要なら調整)
-            marginTop: '30px', // 上マージン
-            fontWeight: 400, // Regular
-            whiteSpace: 'normal',
-            wordWrap: 'break-word',
+            textAlign: 'left',
+            overflow: 'hidden',
+            padding: '10px',
+            boxSizing: 'border-box',
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            borderRadius: '8px',
           }}
         >
           {meaning}
         </div>
-      </div>
-      {/* フッターテキスト (必要ならフレーム画像の上に配置) */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '15px', // 位置調整
-          left: `${padding}px`,
-          right: `${padding}px`,
-          height: '30px', // 高さ調整
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          zIndex: 2, // コンテンツより手前
-          // backgroundColor: 'rgba(0,255,0,0.1)', // デバッグ用
-        }}
-      >
       </div>
     </div>
   );
@@ -453,7 +437,6 @@ export const generateYojijukugoImage = async (yojijukugoData: Yojijukugo): Promi
   return pngBuffer;
 };
 
-// --- ここまで追加 ---
 
 export const WrapDisplay = ({ msg, fontSize }: DisplayProps) => {
   return (
