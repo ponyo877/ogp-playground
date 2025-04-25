@@ -5,7 +5,7 @@ interface Yojijukugo {
     meaning: string;
 }
 
-const yojijukugos: Yojijukugo[] = [
+export const yojijukugos: Yojijukugo[] = [
     { yojijukugo: "哀哀父母", yomi: "あいあいふぼ", origin: "https://www.kanjipedia.jp/kotoba/0000015300", meaning: "苦労を重ねた父母の死をかなしみ、その恩に報いることができなかったことをなげく語。親孝行な子が親を思慕する真情を表したもの。「哀哀」は深くかなしむさま。", },
     { yojijukugo: "合縁奇縁", yomi: "あいえんきえん", origin: "https://www.kanjipedia.jp/kotoba/0002341500", meaning: "不思議な巡り合わせの縁。人と人との結びつきで、気心が合う合わないは因縁という不思議な力によるものだということ。縁は異なもの味なもの", },
     { yojijukugo: "哀毀骨立", yomi: "あいきこつりつ", origin: "https://www.kanjipedia.jp/kotoba/0000016000", meaning: "あまりのかなしさに、身がやせ細り、骨ばかりになること。父母との死別などで非常にかなしむことのたとえ。「哀毀」はかなしみのためにやせ細る意。「骨立」は肉が落ちて骨と皮ばかりになる意。", },

@@ -6,6 +6,7 @@ import { Resvg, initWasm } from '@resvg/resvg-wasm';
 import { loadGoogleFont, type FontOptions } from './fonts'; // FontOptions をインポート
 import yogaWasm from '../vender/yoga.wasm';
 import resvgWasm from '../vender/resvg.wasm';
+import { frameImageDataUri } from './frame'; // フレーム画像のデータURIをインポート
 
 const genModuleInit = () => {
   let isInit = false;
@@ -267,6 +268,192 @@ export const Display = ({ msg, fontSize }: DisplayProps) => {
   );
 };
 
+// Yojijukugoインターフェース定義 (ユーザー提供のスニペットより)
+interface Yojijukugo {
+  yojijukugo: string;
+  yomi: string;
+  origin: string;
+  meaning: string;
+}
+
+interface YojijukugoDisplayProps {
+  yojijukugoData: Yojijukugo;
+  // frameImageDataUri はコンポーネント内で定義する
+}
+
+// 四字熟語表示用コンポーネント
+export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) => {
+  const { yojijukugo, yomi, origin, meaning } = yojijukugoData;
+
+  // フォントサイズやスタイルは画像から調整
+  const yomiFontSize = 40;
+  const yojijukugoFontSize = 160;
+  const meaningFontSize = 36;
+  const footerFontSize = 24;
+  const padding = 60; // 全体のパディング
+
+  return (
+    <div
+      style={{
+        width: '1200px', // 固定幅
+        height: '630px', // 固定高
+        display: 'flex',
+        backgroundColor: 'white',
+        fontFamily: '"Noto Serif JP"', // デフォルトフォント
+        position: 'relative', // 子要素を絶対配置するため
+        boxSizing: 'border-box',
+        // border, borderRadius, padding は画像で表現
+      }}
+    >
+      {/* フレーム画像 (背景として配置) */}
+      <img
+        src={frameImageDataUri}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0, // 背面に配置
+        }}
+        alt="Frame"
+      />
+      {/* コンテンツコンテナ (フレームの内側に配置) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: `${padding}px`, // 上下のパディング
+          bottom: `${padding + 60}px`, // 下部はフッター高さ(60px)を考慮
+          left: `${padding}px`, // 左右のパディング
+          right: `${padding}px`,
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 1, // フレームより手前に配置
+        }}
+      >
+        {/* 読み */}
+        <div
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: `${yomiFontSize}px`,
+            color: '#333',
+            letterSpacing: '1.0em', // 文字間隔を調整 (1.2emから少し戻す)
+            marginBottom: '20px', // 下マージン
+            fontWeight: 400, // Regular
+          }}
+        >
+          {yomi}
+        </div>
+
+        {/* 四字熟語 */}
+        <div
+          style={{
+            flexGrow: 1, // 残りのスペースを埋める
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: `${yojijukugoFontSize}px`,
+            fontWeight: 700, // Bold
+            color: '#111',
+            lineHeight: 1.1,
+            textAlign: 'center',
+          }}
+        >
+          {yojijukugo}
+        </div>
+
+        {/* 意味 */}
+        <div
+          style={{
+            width: '100%',
+            fontSize: `${meaningFontSize}px`,
+            color: '#444',
+            lineHeight: 1.6,
+            textAlign: 'left', // 左揃え
+            maxHeight: '200px', // 高さに制限を設ける (調整)
+            overflow: 'hidden', // はみ出した部分は隠す (必要なら調整)
+            marginTop: '30px', // 上マージン
+            fontWeight: 400, // Regular
+            whiteSpace: 'normal',
+            wordWrap: 'break-word',
+          }}
+        >
+          {meaning}
+        </div>
+      </div>
+      {/* フッターテキスト (必要ならフレーム画像の上に配置) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '15px', // 位置調整
+          left: `${padding}px`,
+          right: `${padding}px`,
+          height: '30px', // 高さ調整
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          zIndex: 2, // コンテンツより手前
+          // backgroundColor: 'rgba(0,255,0,0.1)', // デバッグ用
+        }}
+      >
+      </div>
+    </div>
+  );
+};
+
+
+// 四字熟語画像生成関数
+export const generateYojijukugoImage = async (yojijukugoData: Yojijukugo): Promise<Uint8Array> => {
+  await moduleInit();
+
+  // Noto Serif JP フォントをロード (Regular 400, Bold 700)
+  const fontOptionsRegular: FontOptions = { family: 'Noto Serif JP', weight: 400 };
+  const fontOptionsBold: FontOptions = { family: 'Noto Serif JP', weight: 700 };
+
+  const [notoSerifJPRegular, notoSerifJPBold] = await Promise.all([
+    loadGoogleFont(fontOptionsRegular),
+    loadGoogleFont(fontOptionsBold),
+  ]);
+
+  // YojijukugoDisplay コンポーネントを生成 (frameImageDataUriは内部で定義)
+  const node = <YojijukugoDisplay yojijukugoData={yojijukugoData} />;
+
+  // satoriでSVGを生成
+  const svg = await satori(node, {
+    width: 1200,
+    height: 630,
+    loadAdditionalAsset: loadAdditionalAsset, // 絵文字等が必要な場合
+    fonts: [
+      {
+        name: 'Noto Serif JP',
+        data: notoSerifJPRegular,
+        weight: 400,
+        style: 'normal',
+      },
+      {
+        name: 'Noto Serif JP',
+        data: notoSerifJPBold,
+        weight: 700,
+        style: 'normal',
+      },
+      // 必要に応じて他のフォント (Noto Sans JPなど) も追加
+    ],
+  });
+
+  // ResvgでPNGに変換
+  const resvg = new Resvg(svg, {
+    // オプションがあれば指定 (例: background)
+  });
+  const pngData = resvg.render();
+  const pngBuffer = pngData.asPng();
+
+  return pngBuffer;
+};
+
+// --- ここまで追加 ---
 
 export const WrapDisplay = ({ msg, fontSize }: DisplayProps) => {
   return (
