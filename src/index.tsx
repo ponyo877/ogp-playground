@@ -2,12 +2,13 @@ import { Hono } from 'hono'
 import { renderer } from './renderer'
 import { v4 as uuidv4 } from 'uuid';
 import { ulid } from 'ulid';
-import { generateImage, generateWrappingImage, generateYojijukugoImage } from './lib/img' // Display を削除
-// moment-timezone をインポート
+import { generateImage, generateWrappingImage, generateYojijukugoImage, generateWikiImage } from './lib/img' // Display を削除
 import moment from 'moment-timezone';
 import { renderHtml } from './metadata'
-import { yojijukugos } from './lib/yojijukugos' // 文字列を直接渡す
+import { yojijukugos } from './lib/yojijukugos'
+import { randomWiki } from './lib/wiki'
 
+const endpoint = 'https://ogp-playground.ponyo877.workers.dev'
 
 const app = new Hono()
 
@@ -28,21 +29,25 @@ app.get('/', (c) => {
 // - 1秒ごとに増える「このリンクが作られてから経過した秒数」
 // - 最新のGitHubトレンド1位のリポジトリ名
 */
-app.get('/:mode', (c) => {
+app.get('/:mode', async (c) => {
   const key = c.req.param('mode')
+  let imageURL = ''
   switch (key) {
     case 'wiki':
-      // return c.text(renderHtml(key, 'https://ja.wikipedia.org/wiki/Special:Random'), 200, {
-      //   'Content-Type': 'text/html; charset=utf-8',
-      // })
-      return c.text('Wiki mode is currently disabled.', 501)
-    case 'github':
-      // return c.text(renderHtml(key, ''), 200, {
-      //   'Content-Type': 'text/html; charset=utf-8',
-      // })
-      return c.text('GitHub mode is currently disabled.', 501)
+      const wiki = await randomWiki()
+      imageURL = `${endpoint}/img/wiki?t=${encodeURIComponent(wiki.title)}`;
+      return c.text(renderHtml(key, imageURL, wiki.origin), 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+      })
+    case 'yojijukugo':
+      // 
+      const number = Math.floor(Math.random() * yojijukugos.length);
+      imageURL = `${endpoint}/img/yojijukugo?n=${number}`;
+      return c.text(renderHtml(key, imageURL, yojijukugos[number].origin), 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+      })
     default:
-      return c.text(renderHtml(key, ''), 200, {
+      return c.text(renderHtml(key, '', ''), 200, {
         'Content-Type': 'text/html; charset=utf-8',
       })
   }
@@ -79,16 +84,16 @@ app.get('/img/:mode', async (c) => {
       })
     }
     case 'yojijukugo': {
-      const yojijukugo = yojijukugos[Math.floor(Math.random() * yojijukugos.length)];
-      const img = await generateYojijukugoImage(yojijukugo);
+      const numberStr = c.req.query('n');
+      const number = numberStr ? parseInt(numberStr, 10) : 0;
+      const img = await generateYojijukugoImage(number);
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
     }
     case 'wiki': {
-      // TODO: Implement actual Wikipedia fetching logic
-      const msg = 'Wikipedia記事'; // Placeholder
-      const img = await generateImage(msg);
+      const title = c.req.query('t') || '<BLANK>';
+      const img = await generateWikiImage(title);
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })

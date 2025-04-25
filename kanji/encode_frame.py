@@ -1,8 +1,8 @@
 import base64
 import sys
 
-image_path = 'frame.png'
-output_variable_name = 'frameImageDataUri'
+image_path = 'wiki_frame.png'
+output_variable_name = 'frameWikiImageDataUri'
 
 try:
     with open(image_path, "rb") as image_file:

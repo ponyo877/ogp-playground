@@ -6,7 +6,9 @@ import { Resvg, initWasm } from '@resvg/resvg-wasm';
 import { loadGoogleFont, type FontOptions } from './fonts'; // FontOptions をインポート
 import yogaWasm from '../vender/yoga.wasm';
 import resvgWasm from '../vender/resvg.wasm';
-import { frameImageDataUri } from './frame'; // フレーム画像のデータURIをインポート
+import { frameKanjiImageDataUri, frameWikiImageDataUri } from './frame'; // フレーム画像のデータURIをインポート
+import { Yojijukugo, yojijukugos } from './yojijukugos'; // Yojijukugo型をインポート
+import { Wiki } from './wiki'; // Yojijukugo型をインポート
 
 const genModuleInit = () => {
   let isInit = false;
@@ -268,13 +270,6 @@ export const Display = ({ msg, fontSize }: DisplayProps) => {
   );
 };
 
-// Yojijukugoインターフェース定義 (ユーザー提供のスニペットより)
-interface Yojijukugo {
-  yojijukugo: string;
-  yomi: string;
-  origin: string;
-  meaning: string;
-}
 
 interface YojijukugoDisplayProps {
   yojijukugoData: Yojijukugo;
@@ -307,7 +302,7 @@ export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) =>
     >
       {/* フレーム画像 (背景として配置) */}
       <img
-        src={frameImageDataUri}
+        src={frameKanjiImageDataUri}
         style={{
           position: 'absolute',
           top: 0,
@@ -377,7 +372,6 @@ export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) =>
             overflow: 'hidden',
             padding: '10px',
             boxSizing: 'border-box',
-            backgroundColor: 'rgba(255,255,255,0.9)',
             borderRadius: '8px',
           }}
         >
@@ -388,9 +382,110 @@ export const YojijukugoDisplay = ({ yojijukugoData }: YojijukugoDisplayProps) =>
   );
 };
 
+interface WikiDisplayProps {
+  wikiData: Wiki;
+  // frameImageDataUri はコンポーネント内で定義する
+}
+
+// 四字熟語表示用コンポーネント
+export const WikiDisplay = ({ title }: { title: string }) => {
+
+  // フォントサイズやスタイルは画像から調整
+  const subFontSize = 40;
+  const wikiFontSize = 160;
+  const padding = 60; // 全体のパディング
+
+  return (
+    <div
+      style={{
+        width: '1200px', // 固定幅
+        height: '630px', // 固定高
+        display: 'flex',
+        backgroundColor: 'white',
+        fontFamily: '"Noto Serif JP"', // デフォルトフォント
+        position: 'relative', // 子要素を絶対配置するため
+        boxSizing: 'border-box',
+        // border, borderRadius, padding は画像で表現
+      }}
+    >
+      {/* フレーム画像 (背景として配置) */}
+      <img
+        src={frameWikiImageDataUri}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0, // 背面に配置
+        }}
+        alt="Frame"
+      />
+      {/* コンテンツコンテナ (フレームの内側に配置) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: `${padding}px`, // 上下のパディング
+          bottom: `${padding + 60}px`, // 下部はフッター高さ(60px)を考慮
+          left: `${padding}px`, // 左右のパディング
+          right: `${padding}px`,
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 1, // フレームより手前に配置
+        }}
+      >
+        {/* サブ */}
+        <div
+          style={{
+            height: '60px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: `${subFontSize}px`,
+            color: '#333',
+            letterSpacing: '1.0em',
+            marginBottom: '10px',
+            fontWeight: 400,
+          }}
+        >
+          {`ランダムウィキペディア`}
+        </div>
+
+        {/* タイトル */}
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: `${wikiFontSize}px`,
+            fontWeight: 700,
+            color: '#111',
+            lineHeight: 1.1,
+            textAlign: 'center',
+            margin: '20px 0',
+          }}
+        >
+          {title}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+export const generateYojijukugoImage = async (number: number) => {
+  const node = <YojijukugoDisplay yojijukugoData={yojijukugos[number]} />;
+  return generateImage2(node);
+}
+
+export const generateWikiImage = async (title: string) => {
+  const node = <WikiDisplay title={title} />;
+  return generateImage2(node);
+}
 
 // 四字熟語画像生成関数
-export const generateYojijukugoImage = async (yojijukugoData: Yojijukugo): Promise<Uint8Array> => {
+export const generateImage2 = async (node: React.ReactNode): Promise<Uint8Array> => {
   await moduleInit();
 
   // Noto Serif JP フォントをロード (Regular 400, Bold 700)
@@ -403,7 +498,7 @@ export const generateYojijukugoImage = async (yojijukugoData: Yojijukugo): Promi
   ]);
 
   // YojijukugoDisplay コンポーネントを生成 (frameImageDataUriは内部で定義)
-  const node = <YojijukugoDisplay yojijukugoData={yojijukugoData} />;
+  // const node = <YojijukugoDisplay yojijukugoData={yojijukugoData} />;
 
   // satoriでSVGを生成
   const svg = await satori(node, {

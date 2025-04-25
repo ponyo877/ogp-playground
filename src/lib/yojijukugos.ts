@@ -1,4 +1,4 @@
-interface Yojijukugo {
+export interface Yojijukugo {
     yojijukugo: string;
     yomi: string;
     origin: string;
