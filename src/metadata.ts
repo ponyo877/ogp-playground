@@ -1,15 +1,10 @@
 const endpoint = 'https://ogp-playground.ponyo877.workers.dev'
 
-
 export const renderHtml = (mode: string, redirectURL: string) => {
-    let body = '<body><h1>Created by <a href="https://x.com/ponyo877">ponyo877</a></h1></body>'
-    let redirectElem = ''
-    if (redirectURL) {
-      body = ''
-      redirectElem = `<meta http-equiv="refresh" content="0; url=${redirectURL}" />`
-    }
-  
-    return `
+  const body = '<body><h1>Created by <a href="https://x.com/ponyo877">ponyo877</a></h1></body>'
+  const redirectElem = `<meta http-equiv="refresh" content="0; url=${redirectURL}" />`
+
+  return `
   <!DOCTYPE html>
   <html>
     <head>
@@ -23,10 +18,9 @@ export const renderHtml = (mode: string, redirectURL: string) => {
       <meta name="twitter:title" content="${mode}" />
       <meta name="twitter:description" content="${mode}" />
       <meta name="twitter:image" content="${endpoint}/img/${mode}" />
-      ${redirectElem}
+      ${redirectURL ? redirectElem : ''}
     </head>
-    ${body}
+    ${redirectURL ? '' : body}
   </html>
   `
-  }
-  
+}
