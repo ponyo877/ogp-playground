@@ -10,7 +10,7 @@ export async function randomWiki(): Promise<Wiki> {
     // http://ja.wikipedia.org/wiki/Special:Randompage
     const response = await fetch(`http://ja.wikipedia.org/wiki/Special:Randompage`);
     const text = await response.text();
-    const title = text.match(/<meta property="og:title" content="(.+?)">/)?.[1] || '';
+    const title = text.match(/<meta property="og:title" content="(.+?) - Wikipedia">/)?.[1] || '';
     const origin = text.match(/<link rel="canonical" href="(.+?)">/)?.[1] || '';
 
     return { title, origin };

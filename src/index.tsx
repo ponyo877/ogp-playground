@@ -20,32 +20,40 @@ app.get('/', (c) => {
 
 // Commenting out the /:mode route as renderHtml is not defined
 // and its purpose is unclear in the context of OGP image generation.
-/*
 // - 現在日付・時刻がOGP画像として出る
 // - 運勢(大吉~凶)がOGP画像として出る
-// - ULIDがOGP画像として出る
-// - 今日の「謎の四字熟語」
+// - UUID,ULIDがOGP画像として出る
+// - 今日の四字熟語
 // - 最新のWikipediaランダム記事のタイトル
-// - 1秒ごとに増える「このリンクが作られてから経過した秒数」
-// - 最新のGitHubトレンド1位のリポジトリ名
-*/
 app.get('/:mode', async (c) => {
   const key = c.req.param('mode')
   let imageURL = ''
   switch (key) {
+    case 'fortune':
+      const fortunes = ['daikichi', 'kichi', 'shoukichi', 'suekichi', 'kyou', 'daikyou'];
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      imageURL = `${endpoint}/img/fortune?f=${encodeURIComponent(fortune)}`;
+      return c.text(renderHtml(key, imageURL, ''), 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+      })
     case 'wiki':
       const wiki = await randomWiki()
       imageURL = `${endpoint}/img/wiki?t=${encodeURIComponent(wiki.title)}`;
-      return c.text(renderHtml(key, imageURL, wiki.origin), 200, {
+      return c.text(renderHtml(key, imageURL, ''), 200, {
         'Content-Type': 'text/html; charset=utf-8',
       })
     case 'yojijukugo':
-      // 
       const number = Math.floor(Math.random() * yojijukugos.length);
       imageURL = `${endpoint}/img/yojijukugo?n=${number}`;
-      return c.text(renderHtml(key, imageURL, yojijukugos[number].origin), 200, {
+      return c.text(renderHtml(key, imageURL, ''), 200, {
         'Content-Type': 'text/html; charset=utf-8',
       })
+    // case 'free':
+    //   const msg = c.req.query('m') || '<BLANK>';
+    //   imageURL = `${endpoint}/img/free?m=${encodeURIComponent(msg)}`;
+    //   return c.text(renderHtml(key, imageURL, ''), 200, {
+    //     'Content-Type': 'text/html; charset=utf-8',
+    //   })
     default:
       return c.text(renderHtml(key, '', ''), 200, {
         'Content-Type': 'text/html; charset=utf-8',
@@ -64,11 +72,6 @@ app.get('/img/:mode', async (c) => {
         'Content-Type': 'image/png',
       })
     }
-    case 'fortune': {
-      const fortunes = ['daikichi', 'kichi', 'shoukichi', 'suekichi', 'kyou', 'daikyou'];
-      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-      return c.redirect(`https://ogp-playground.folks-chat.com/fortune/${fortune}.png`)
-    }
     case 'uuid': {
       const msg = uuidv4();
       const img = await generateImage(msg);
@@ -82,6 +85,10 @@ app.get('/img/:mode', async (c) => {
       return c.body(img, 200, {
         'Content-Type': 'image/png',
       })
+    }
+    case 'fortune': {
+      const fortune = c.req.query('f') || '<BLANK>';
+      return c.redirect(`https://ogp-playground.folks-chat.com/fortune/${fortune}.png`)
     }
     case 'yojijukugo': {
       const numberStr = c.req.query('n');
@@ -98,13 +105,13 @@ app.get('/img/:mode', async (c) => {
         'Content-Type': 'image/png',
       })
     }
-    case 'free': {
-      const msg = c.req.query('m') || '<BLANK>';
-      const img = await generateWrappingImage(msg);
-      return c.body(img, 200, {
-        'Content-Type': 'image/png',
-      })
-    }
+    // case 'free': {
+    //   const msg = c.req.query('m') || '<BLANK>';
+    //   const img = await generateWrappingImage(msg);
+    //   return c.body(img, 200, {
+    //     'Content-Type': 'image/png',
+    //   })
+    // }
     default:
       return c.text('Not Found', 404)
   }
